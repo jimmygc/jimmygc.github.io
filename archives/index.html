@@ -94,15 +94,15 @@
       
       <div class="article-meta">
         <p class="category"></p>
-        <p class="date"><time datetime="2017-01-11T03:30:07.556Z" itemprop="datePublished">2017-01-11</time></p>
+        <p class="date"><time datetime="2017-01-11T03:53:00.000Z" itemprop="datePublished">2017-01-11</time></p>
       </div>
       <h2 class="article-title">
-        <a href="/2017/01/11/hello-world/" class="title">Hexo Usage</a>
+        <a href="/2017/01/11/Local-NTP-Server-Configuration/" class="title">Local NTP Server Configuration</a>
       </h2>
       <p class="article-excerpt">
         
-        Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick
+        /etc/ntp.conf1234restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap 允许局域网内机器同步时间server 127.127.1.0 # local clockfudge 127.127.1.0 stratum 10 外界同步源无法联系时，使用本地时间为同步服务
+
       </p>
     </div>
   </article>
@@ -115,15 +115,15 @@ Quick
       
       <div class="article-meta">
         <p class="category"></p>
-        <p class="date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
+        <p class="date"><time datetime="2017-01-11T03:30:07.556Z" itemprop="datePublished">2017-01-11</time></p>
       </div>
       <h2 class="article-title">
-        <a href="/2017/01/11/etw-learning/" class="title">关于最近学习内核驱动中使用ETW的记录</a>
+        <a href="/2017/01/11/hello-world/" class="title">Hexo Usage</a>
       </h2>
       <p class="article-excerpt">
         
-        ETW（Event Tracing for Windows）是微软的日志记录系统。与WPP不同的是，ETW多用于系统管理而WPP用于开发人员开发过程中的Debug。:smile:
-使用ETW需要生成XML格式的描述事件的XML或MAN声明文件，由声明文件用Windows kit自带的mc（message compiler）程序编译生成资源文件rc，头文件以及包含message信息的bin文件。MS
+        Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
+Quick
       </p>
     </div>
   </article>
@@ -143,14 +143,12 @@ Quick
         <p class="date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
       </div>
       <h2 class="article-title">
-        <a href="/2017/01/11/vim-windows-chinese-encoding/" class="title">【转】Vim在Windows控制台乱码问题解决</a>
+        <a href="/2017/01/11/etw-learning/" class="title">关于最近学习内核驱动中使用ETW的记录</a>
       </h2>
       <p class="article-excerpt">
         
-        Vim中有四个与编码有关的选项
-encoding
-
-encoding是vim内部使用的字符编码，当我们设置了encoding之后，vim内部所有的buffer,寄存器，脚本中的字符串等，全都使用这个编码。vim在工作时，如果编码方式与它的内部编码不一致，它会先把编码转换成内部编码，这样会出现有些字符无法转换，造成字符丢失。而utf8的范围是非常大的，很适合。但在windows这样非utf8字符系统
+        ETW（Event Tracing for Windows）是微软的日志记录系统。与WPP不同的是，ETW多用于系统管理而WPP用于开发人员开发过程中的Debug。:smile:
+使用ETW需要生成XML格式的描述事件的XML或MAN声明文件，由声明文件用Windows kit自带的mc（message compiler）程序编译生成资源文件rc，头文件以及包含message信息的bin文件。MS
       </p>
     </div>
   </article>
@@ -235,6 +233,15 @@ commandcommand=’[应用范围][/匹配行正则表达式/]/命令’
             
             <div class="item-inner">
               <p class="item-category"></p>
+              <p class="item-title"><a href="/2017/01/11/Local-NTP-Server-Configuration/" class="title">Local NTP Server Configuration</a></p>
+              <p class="item-date"><time datetime="2017-01-11T03:53:00.000Z" itemprop="datePublished">2017-01-11</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
               <p class="item-title"><a href="/2017/01/11/hello-world/" class="title">Hexo Usage</a></p>
               <p class="item-date"><time datetime="2017-01-11T03:30:07.556Z" itemprop="datePublished">2017-01-11</time></p>
             </div>
@@ -245,15 +252,6 @@ commandcommand=’[应用范围][/匹配行正则表达式/]/命令’
             <div class="item-inner">
               <p class="item-category"></p>
               <p class="item-title"><a href="/2017/01/11/etw-learning/" class="title">关于最近学习内核驱动中使用ETW的记录</a></p>
-              <p class="item-date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
-            </div>
-          </li>
-        
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category"></p>
-              <p class="item-title"><a href="/2017/01/11/vim-windows-chinese-encoding/" class="title">【转】Vim在Windows控制台乱码问题解决</a></p>
               <p class="item-date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
             </div>
           </li>

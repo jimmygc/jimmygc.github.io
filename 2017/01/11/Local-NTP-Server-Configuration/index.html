@@ -3,14 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2017/1 | GC的博客 -- GitHub.io</title>
+  <title>Local NTP Server Configuration | GC的博客 -- GitHub.io</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="GC的博客 -- GitHub.io">
-<meta property="og:url" content="http://jimmygc.github.io/archives/2017/01/index.html">
+  <meta name="description" content="/etc/ntp.conf1234restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap 允许局域网内机器同步时间server 127.127.1.0 # local clockfudge 127.127.1.0 stratum 10 外界同步源无法联系时，使用本地时间为同步服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Local NTP Server Configuration">
+<meta property="og:url" content="http://jimmygc.github.io/2017/01/11/Local-NTP-Server-Configuration/index.html">
 <meta property="og:site_name" content="GC的博客 -- GitHub.io">
+<meta property="og:description" content="/etc/ntp.conf1234restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap 允许局域网内机器同步时间server 127.127.1.0 # local clockfudge 127.127.1.0 stratum 10 外界同步源无法联系时，使用本地时间为同步服务">
+<meta property="og:updated_time" content="2017-01-11T04:00:38.029Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="GC的博客 -- GitHub.io">
+<meta name="twitter:title" content="Local NTP Server Configuration">
+<meta name="twitter:description" content="/etc/ntp.conf1234restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap 允许局域网内机器同步时间server 127.127.1.0 # local clockfudge 127.127.1.0 stratum 10 外界同步源无法联系时，使用本地时间为同步服务">
   
   
 
@@ -82,83 +86,50 @@
           <section id="main">
             <div class="main-body-header">
 
-              <h1 class="header"><i class="icon" id="icon-archive"></i>archive: 2017/1</h1>
+              <h1 class="header">uncategorized</h1>
             </div>
             <div class="main-body-content">
               
-      <div class="article-row">
-    
-        
-  <article class="article article-summary">
-    <div class="article-summary-inner">
+  <article id="post-Local-NTP-Server-Configuration" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+      <!--  -->
       
-      <div class="article-meta">
-        <p class="category"></p>
-        <p class="date"><time datetime="2017-01-11T03:53:00.000Z" itemprop="datePublished">2017-01-11</time></p>
-      </div>
-      <h2 class="article-title">
-        <a href="/2017/01/11/Local-NTP-Server-Configuration/" class="title">Local NTP Server Configuration</a>
-      </h2>
-      <p class="article-excerpt">
-        
-        /etc/ntp.conf1234restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap 允许局域网内机器同步时间server 127.127.1.0 # local clockfudge 127.127.1.0 stratum 10 外界同步源无法联系时，使用本地时间为同步服务
+        <header class="article-header">
+          
+  
+    <h1 class="article-title" itemprop="name">
+      Local NTP Server Configuration
+    </h1>
+  
 
+        </header>
+      
+      <p class="article-byline">
+        <a href="/2017/01/11/Local-NTP-Server-Configuration/" class="article-date">
+  <time datetime="2017-01-11T03:53:00.000Z" itemprop="datePublished">2017-01-11</time>
+</a>
       </p>
+      <div class="article-entry" itemprop="articleBody">
+        <p>/etc/ntp.conf<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">restrict 192.168.1.0 mask 255.255.255.0 nomodify notrap 允许局域网内机器同步时间</div><div class="line"></div><div class="line">server 127.127.1.0 # local clock</div><div class="line">fudge 127.127.1.0 stratum 10 外界同步源无法联系时，使用本地时间为同步服务</div></pre></td></tr></table></figure></p>
+
+      </div>
+      <footer class="article-footer">
+        <a data-url="http://jimmygc.github.io/2017/01/11/Local-NTP-Server-Configuration/" data-id="cixsf4yfi0000hucm3a803fqv" class="article-share-link">Share</a>
+        
+          <a href="http://jimmygc.github.io/2017/01/11/Local-NTP-Server-Configuration/#comments" class="article-comment-link">Comments</a>
+        
+        
+      </footer>
     </div>
   </article>
-
-    
   
-        
-  <article class="article article-summary">
-    <div class="article-summary-inner">
-      
-      <div class="article-meta">
-        <p class="category"></p>
-        <p class="date"><time datetime="2017-01-11T03:30:07.556Z" itemprop="datePublished">2017-01-11</time></p>
-      </div>
-      <h2 class="article-title">
-        <a href="/2017/01/11/hello-world/" class="title">Hexo Usage</a>
-      </h2>
-      <p class="article-excerpt">
-        
-        Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick
-      </p>
-    </div>
-  </article>
-
-    
-      </div>
-    
+    <section id="comments">
+	<!-- UY BEGIN -->
+	<div id="uyan_frame"></div>
+	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2066865"></script>
+	<!-- UY END -->
+    </section>
   
-      <div class="article-row">
-    
-        
-  <article class="article article-summary">
-    <div class="article-summary-inner">
-      
-      <div class="article-meta">
-        <p class="category"></p>
-        <p class="date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
-      </div>
-      <h2 class="article-title">
-        <a href="/2017/01/11/etw-learning/" class="title">关于最近学习内核驱动中使用ETW的记录</a>
-      </h2>
-      <p class="article-excerpt">
-        
-        ETW（Event Tracing for Windows）是微软的日志记录系统。与WPP不同的是，ETW多用于系统管理而WPP用于开发人员开发过程中的Debug。:smile:
-使用ETW需要生成XML格式的描述事件的XML或MAN声明文件，由声明文件用Windows kit自带的mc（message compiler）程序编译生成资源文件rc，头文件以及包含message信息的bin文件。MS
-      </p>
-    </div>
-  </article>
-
-    
-      </div>
-    
-  
-  
-
 
             </div>
           </section>
@@ -172,6 +143,19 @@ Quick
       
     </ul>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/01/11/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">older</strong>
+      <p class="article-nav-title">Hexo Usage</p>
+      <i class="icon" id="icon-chevron-left"></i>
+    </a>
+  
+</nav>
+
   
   <div class="widgets-container">
     
@@ -275,11 +259,13 @@ Quick
 <script>
   var disqus_shortname = 'jimmygc';
   
+  var disqus_url = 'http://jimmygc.github.io/2017/01/11/Local-NTP-Server-Configuration/';
+  
   (function(){
     var dsq = document.createElement('script');
     dsq.type = 'text/javascript';
     dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
   })();
 </script>
