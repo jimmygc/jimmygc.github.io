@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>sed-basic | GC的博客 -- GitHub.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="sed123456sed [-nefri] &apos;command&apos;  文件-n 静默模式-e 可多重编辑-f 保存成文件-r 扩展正则表达式-i 直接修改文件内容
+commandcommand=’[应用范围][/匹配行正则表达式/]/命令’
+常用命令123456a 向下新增一行，后跟内容c 取代行d 删除行i 向上插入行p 打印s 行内取代，其后跟正则表达式 s/正则表达式/[g] g代表替换全部，默">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sed-basic">
+<meta property="og:url" content="http://jimmygc.github.io/2015/07/17/sed-basic/index.html">
+<meta property="og:site_name" content="GC的博客 -- GitHub.io">
+<meta property="og:description" content="sed123456sed [-nefri] &apos;command&apos;  文件-n 静默模式-e 可多重编辑-f 保存成文件-r 扩展正则表达式-i 直接修改文件内容
+commandcommand=’[应用范围][/匹配行正则表达式/]/命令’
+常用命令123456a 向下新增一行，后跟内容c 取代行d 删除行i 向上插入行p 打印s 行内取代，其后跟正则表达式 s/正则表达式/[g] g代表替换全部，默">
+<meta property="og:updated_time" content="2017-01-11T03:07:50.975Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sed-basic">
+<meta name="twitter:description" content="sed123456sed [-nefri] &apos;command&apos;  文件-n 静默模式-e 可多重编辑-f 保存成文件-r 扩展正则表达式-i 直接修改文件内容
+commandcommand=’[应用范围][/匹配行正则表达式/]/命令’
+常用命令123456a 向下新增一行，后跟内容c 取代行d 删除行i 向上插入行p 打印s 行内取代，其后跟正则表达式 s/正则表达式/[g] g代表替换全部，默">
+  
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  
+    <link rel="stylesheet" href="/scrollLoading/style.css">
+  
+  
+
+
+  
+    <style type="text/css">
+      .logo { background-image:url(http://jimmygc.github.io/css/images/spawn.png); }
+    </style>
+  
+
+  
+    <link href='//fonts.useso.com/css?family=Titillium+Web:300,400,600' rel='stylesheet' type='text/css'>
+    <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+
+</head>
+
+<body>
+  <div id="wrap">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div class="container">
+      <div class="container-inner">
+        <div id="header-title">
+          <h1 class="logo-wrap">
+            <a href="/" class="logo"></a>
+          </h1>
+          
+            <h2 class="subtitle-wrap">
+              <p class="subtitle">GC的博客 -- GitHub.io</p>
+            </h2>
+          
+        </div>
+        <div id="header-inner" class="nav-container">
+          <a id="main-nav-toggle" class="nav-icon"></a>
+          <div class="nav-container-inner">
+            <ul id="main-nav">
+              
+                <li class="main-nav-list-item" ><a class="main-nav-list-link" href="/">Home</a></li>
+              
+                    
+                  
+                <li class="main-nav-list-item" ><a class="main-nav-list-link" href="/about/index.html">About</a></li>
+              
+            </ul>
+            <nav id="sub-nav">
+              <div id="search-form-wrap">
+                <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="hidden" name="sitesearch" value="http://jimmygc.github.io"></form>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="container">
+      <div class="main-body container-inner">
+        <div class="main-body-inner">
+          <section id="main">
+            <div class="main-body-header">
+
+              <h1 class="header">uncategorized</h1>
+            </div>
+            <div class="main-body-content">
+              
+  <article id="post-sed-basic" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+      <!--  -->
+      
+        <header class="article-header">
+          
+  
+    <h1 class="article-title" itemprop="name">
+      sed-basic
+    </h1>
+  
+
+        </header>
+      
+      <p class="article-byline">
+        <a href="/2015/07/17/sed-basic/" class="article-date">
+  <time datetime="2015-07-17T09:27:42.000Z" itemprop="datePublished">2015-07-17</time>
+</a>
+      </p>
+      <div class="article-entry" itemprop="articleBody">
+        <h2 id="sed">sed</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">sed [-nefri] <span class="string">'command'</span>  文件</div><div class="line">-n 静默模式</div><div class="line"><span class="_">-e</span> 可多重编辑</div><div class="line"><span class="_">-f</span> 保存成文件</div><div class="line">-r 扩展正则表达式</div><div class="line">-i 直接修改文件内容</div></pre></td></tr></table></figure>
+<h3 id="command">command</h3><p>command=’[应用范围][/匹配行正则表达式/]/命令’</p>
+<p>常用命令<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">a 向下新增一行，后跟内容</div><div class="line">c 取代行</div><div class="line">d 删除行</div><div class="line">i 向上插入行</div><div class="line">p 打印</div><div class="line">s 行内取代，其后跟正则表达式 s/正则表达式/[g] g代表替换全部，默认替换第一个匹配</div></pre></td></tr></table></figure></p>
+
+      </div>
+      <footer class="article-footer">
+        <a data-url="http://jimmygc.github.io/2015/07/17/sed-basic/" data-id="cixsdkiwt0005l1cmflbv9ttt" class="article-share-link">Share</a>
+        
+          <a href="http://jimmygc.github.io/2015/07/17/sed-basic/#comments" class="article-comment-link">Comments</a>
+        
+        
+      </footer>
+    </div>
+  </article>
+  
+    <section id="comments">
+	<!-- UY BEGIN -->
+	<div id="uyan_frame"></div>
+	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2066865"></script>
+	<!-- UY END -->
+    </section>
+  
+
+            </div>
+          </section>
+          <aside id="sidebar">
+  <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+  <div class="sidebar-top">
+    <p>follow:</p>
+    <ul class="social-links">
+      
+        <li><a class="social-tooltip" title="github" href="https://github.com/jimmygc" target="_blank"><i id="icon-github" class="icon"></i></a></li>
+      
+    </ul>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/10/26/设计模式学习/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">newer</strong>
+      <p class="article-nav-title">
+        
+          设计模式学习
+        
+      </p>
+      <i class="icon" id="icon-chevron-right"></i>
+    </a>
+  
+  
+</nav>
+
+  
+  <div class="widgets-container">
+    
+      
+  <div class="widget-wrap">
+    <h3 class="widget-title">recents</h3>
+    <div class="widget">
+      <ul id="recent-post" class="no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2017/01/11/hello-world/" class="title">Hello World</a></p>
+              <p class="item-date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2017/01/11/etw-learning/" class="title">关于最近学习内核驱动中使用ETW的记录</a></p>
+              <p class="item-date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2017/01/11/vim-windows-chinese-encoding/" class="title">【转】Vim在Windows控制台乱码问题解决</a></p>
+              <p class="item-date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2015/10/26/设计模式学习/" class="title">设计模式学习</a></p>
+              <p class="item-date"><time datetime="2015-10-26T06:18:22.000Z" itemprop="datePublished">2015-10-26</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2015/07/17/sed-basic/" class="title">sed-basic</a></p>
+              <p class="item-date"><time datetime="2015-07-17T09:27:42.000Z" itemprop="datePublished">2015-07-17</time></p>
+            </div>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-list">
+    <h3 class="widget-title">archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+
+    
+  </div>
+</aside>
+        </div>
+      </div>
+    </div>
+    <footer id="footer">
+  
+  <div class="container">
+    <div class="container-inner">
+      <a id="back-to-top" href="javascript:;"><i class="icon" id="icon-angle-up"></i></a>
+      <div class="credit">
+        <!-- <h1 class="logo-wrap"> -->
+        <!--  <a href="/" class="logo"></a> -->
+        <!-- </h1> -->
+        <p>&copy; 2017 Jimmygc</p>
+        <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+<script>
+  var disqus_shortname = 'jimmygc';
+  
+  var disqus_url = 'http://jimmygc.github.io/2015/07/17/sed-basic/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+  <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+
+
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script src="/scrollLoading/jquery.scrollLoading.js"></script>
+  <script src="/scrollLoading/main.js"></script>
+
+
+<script src="/js/html-patch.js"></script>
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

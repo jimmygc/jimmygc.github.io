@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>关于最近学习内核驱动中使用ETW的记录 | GC的博客 -- GitHub.io</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ETW（Event Tracing for Windows）是微软的日志记录系统。与WPP不同的是，ETW多用于系统管理而WPP用于开发人员开发过程中的Debug。:smile:
+使用ETW需要生成XML格式的描述事件的XML或MAN声明文件，由声明文件用Windows kit自带的mc（message compiler）程序编译生成资源文件rc，头文件以及包含message信息的bin文件。MS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于最近学习内核驱动中使用ETW的记录">
+<meta property="og:url" content="http://jimmygc.github.io/2017/01/11/etw-learning/index.html">
+<meta property="og:site_name" content="GC的博客 -- GitHub.io">
+<meta property="og:description" content="ETW（Event Tracing for Windows）是微软的日志记录系统。与WPP不同的是，ETW多用于系统管理而WPP用于开发人员开发过程中的Debug。:smile:
+使用ETW需要生成XML格式的描述事件的XML或MAN声明文件，由声明文件用Windows kit自带的mc（message compiler）程序编译生成资源文件rc，头文件以及包含message信息的bin文件。MS">
+<meta property="og:image" content="http://7xkc1v.com1.z0.glb.clouddn.com/images/event-tracing-1.png">
+<meta property="og:image" content="http://7xkc1v.com1.z0.glb.clouddn.com/images/event-tracing-2.png">
+<meta property="og:image" content="http://7xkc1v.com1.z0.glb.clouddn.com/images/event-tracing-3.png">
+<meta property="og:image" content="http://7xkc1v.com1.z0.glb.clouddn.com/images/event-tracing-4.png">
+<meta property="og:updated_time" content="2017-01-11T03:07:50.975Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于最近学习内核驱动中使用ETW的记录">
+<meta name="twitter:description" content="ETW（Event Tracing for Windows）是微软的日志记录系统。与WPP不同的是，ETW多用于系统管理而WPP用于开发人员开发过程中的Debug。:smile:
+使用ETW需要生成XML格式的描述事件的XML或MAN声明文件，由声明文件用Windows kit自带的mc（message compiler）程序编译生成资源文件rc，头文件以及包含message信息的bin文件。MS">
+<meta name="twitter:image" content="http://7xkc1v.com1.z0.glb.clouddn.com/images/event-tracing-1.png">
+  
+  
+
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  
+    <link rel="stylesheet" href="/scrollLoading/style.css">
+  
+  
+
+
+  
+    <style type="text/css">
+      .logo { background-image:url(http://jimmygc.github.io/css/images/spawn.png); }
+    </style>
+  
+
+  
+    <link href='//fonts.useso.com/css?family=Titillium+Web:300,400,600' rel='stylesheet' type='text/css'>
+    <link href="//fonts.useso.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+
+</head>
+
+<body>
+  <div id="wrap">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div class="container">
+      <div class="container-inner">
+        <div id="header-title">
+          <h1 class="logo-wrap">
+            <a href="/" class="logo"></a>
+          </h1>
+          
+            <h2 class="subtitle-wrap">
+              <p class="subtitle">GC的博客 -- GitHub.io</p>
+            </h2>
+          
+        </div>
+        <div id="header-inner" class="nav-container">
+          <a id="main-nav-toggle" class="nav-icon"></a>
+          <div class="nav-container-inner">
+            <ul id="main-nav">
+              
+                <li class="main-nav-list-item" ><a class="main-nav-list-link" href="/">Home</a></li>
+              
+                    
+                  
+                <li class="main-nav-list-item" ><a class="main-nav-list-link" href="/about/index.html">About</a></li>
+              
+            </ul>
+            <nav id="sub-nav">
+              <div id="search-form-wrap">
+                <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="hidden" name="sitesearch" value="http://jimmygc.github.io"></form>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="container">
+      <div class="main-body container-inner">
+        <div class="main-body-inner">
+          <section id="main">
+            <div class="main-body-header">
+
+              <h1 class="header">uncategorized</h1>
+            </div>
+            <div class="main-body-content">
+              
+  <article id="post-etw-learning" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+      <!--  -->
+      
+        <header class="article-header">
+          
+  
+    <h1 class="article-title" itemprop="name">
+      关于最近学习内核驱动中使用ETW的记录
+    </h1>
+  
+
+        </header>
+      
+      <p class="article-byline">
+        <a href="/2017/01/11/etw-learning/" class="article-date">
+  <time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time>
+</a>
+      </p>
+      <div class="article-entry" itemprop="articleBody">
+        <p><strong>ETW</strong>（Event Tracing for Windows）是微软的日志记录系统。与<strong>WPP</strong>不同的是，ETW多用于系统管理而WPP用于开发人员开发过程中的Debug。:smile:</p>
+<p>使用ETW需要生成XML格式的描述事件的XML或MAN声明文件，由声明文件用Windows kit自带的mc（message compiler）程序编译生成资源文件rc，头文件以及包含message信息的bin文件。<br>MSDN官方文章链接：<a href="https://msdn.microsoft.com/en-us/library/windows/hardware/ff541236%28v=vs.85%29.aspx" target="_blank" rel="external">Click ME</a></p>
+<ul>
+<li>生成MAN</li>
+</ul>
+<p>MAN文件可以手写也可以用Windwos Kit里的ECManGen程序生成。</p>
+<p>一个MAN文件中至少要有一个<strong>Provider</strong>，一个<strong>template</strong>，一个<strong>event</strong>，一个<strong>channel</strong>，其他项都是可选的，用于管理中方便事件的归类整理。下面提供一个最小化的MAN文件例子。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version='1.0' encoding='utf-8' standalone='yes'?&gt;</div><div class="line"><span class="tag">&lt;<span class="name">instrumentationManifest</span></span></div><div class="line">    <span class="attr">xmlns</span>=<span class="string">"http://schemas.microsoft.com/win/2004/08/events"</span></div><div class="line">    <span class="attr">xmlns:win</span>=<span class="string">"http://manifests.microsoft.com/win/2004/08/windows/events"</span></div><div class="line">    <span class="attr">xmlns:xs</span>=<span class="string">"http://www.w3.org/2001/XMLSchema"</span></div><div class="line">    <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></div><div class="line">    <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://schemas.microsoft.com/win/2004/08/events eventman.xsd"</span></div><div class="line">    &gt;</div><div class="line">  <span class="tag">&lt;<span class="name">instrumentation</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">events</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">provider</span></span></div><div class="line">          <span class="attr">guid</span>=<span class="string">"&#123;b5a0bda9-50fe-4d0e-a83d-bae3f58c94d6&#125;"</span></div><div class="line">          <span class="attr">messageFileName</span>=<span class="string">"%SystemDrive%\ETWDriverSample\Eventdrv.sys"</span></div><div class="line">          <span class="attr">name</span>=<span class="string">"Sample Driver"</span></div><div class="line">          <span class="attr">resourceFileName</span>=<span class="string">"%SystemDrive%\ETWDriverSample\Eventdrv.sys"</span></div><div class="line">          <span class="attr">symbol</span>=<span class="string">"DriverControlGuid"</span></div><div class="line">          &gt;</div><div class="line">        <span class="tag">&lt;<span class="name">channels</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">importChannel</span></span></div><div class="line">              <span class="attr">chid</span>=<span class="string">"SYSTEM"</span></div><div class="line">              <span class="attr">name</span>=<span class="string">"System"</span></div><div class="line">              /&gt;</div><div class="line">        <span class="tag">&lt;/<span class="name">channels</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">templates</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">template</span> <span class="attr">tid</span>=<span class="string">"debug_template"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">data</span></span></div><div class="line">                <span class="attr">inType</span>=<span class="string">"win:UnicodeString"</span></div><div class="line">                <span class="attr">name</span>=<span class="string">"name"</span></div><div class="line">                <span class="attr">outType</span>=<span class="string">"xs:string"</span></div><div class="line">                /&gt;</div><div class="line">          <span class="tag">&lt;/<span class="name">template</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">templates</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">events</span>&gt;</span></div><div class="line">          <span class="tag">&lt;<span class="name">event</span></span></div><div class="line">              <span class="attr">channel</span>=<span class="string">"SYSTEM"</span></div><div class="line">              <span class="attr">level</span>=<span class="string">"win:Informational"</span></div><div class="line">              <span class="attr">message</span>=<span class="string">"$(string.EventMessage)"</span></div><div class="line">              <span class="attr">opcode</span>=<span class="string">"win:none"</span></div><div class="line">              <span class="attr">symbol</span>=<span class="string">"DebugEvent"</span></div><div class="line">              <span class="attr">template</span>=<span class="string">"debug_template"</span></div><div class="line">              <span class="attr">value</span>=<span class="string">"1"</span></div><div class="line">              /&gt;</div><div class="line">        <span class="tag">&lt;/<span class="name">events</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">provider</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">events</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">instrumentation</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">localization</span> <span class="attr">xmlns</span>=<span class="string">"http://schemas.microsoft.com/win/2004/08/events"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">resources</span> <span class="attr">culture</span>=<span class="string">"en-US"</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">stringTable</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">string</span></span></div><div class="line">            <span class="attr">id</span>=<span class="string">"EventMessage"</span></div><div class="line">            <span class="attr">value</span>=<span class="string">"Debug String"</span></div><div class="line">            /&gt;</div><div class="line">      <span class="tag">&lt;/<span class="name">stringTable</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">resources</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">localization</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">instrumentationManifest</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li>编译MAN</li>
+</ul>
+<p>vs可以自动编译man文件并将生成的文件加入到项目中可实现自动在vs中加入资源及相关宏。根据msdn的介绍方法如下</p>
+<p>将man文档加入驱动项目的resourses文件夹中</p>
+<p>对man文件的属性进行设置</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Generate Kernel Mode Logging Macros	Yes (-km)  \\生成宏</div><div class="line"><span class="keyword">Use</span> Base <span class="keyword">Name</span> <span class="keyword">of</span> <span class="keyword">Input</span>	Yes (-b)               \\自动生成文件的前缀</div><div class="line">Generate header <span class="keyword">file</span> <span class="keyword">for</span> containing counter	Yes \\生成头文件</div><div class="line">Header <span class="keyword">File</span> <span class="keyword">Path</span>	$(IntDir)           \\生成头文件的位置，建议放在项目下，不要放在生成目录</div><div class="line"><span class="keyword">Generated</span> RC <span class="keyword">and</span> <span class="built_in">Binary</span> Message Files <span class="keyword">Path</span>	Yes \\生成rc文件和二进制message文件</div><div class="line">RC <span class="keyword">File</span> <span class="keyword">Path</span>	$(IntDir)                        \\生成rc和<span class="keyword">bin</span>文件的位置</div><div class="line"><span class="keyword">Generated</span> Files Base <span class="keyword">Name</span>	$(Filename)          \\生成文件的前缀定义，默认是man文件的文件名</div></pre></td></tr></table></figure>
+<p>正常编译一次生成头文件，将头文件include到需要记录的地方就可以使用里面的宏。</p>
+<ul>
+<li>驱动中使用事件记录宏</li>
+</ul>
+<p>在需要记录事件的地方include刚刚生成的头文件，在驱动载入函数（比如driverentry）中调用注册event provider的宏（<strong>EventRegisterSample_Driver</strong>），在驱动卸载函数中（unload函数）中调用反注册函数（<strong>EventUnregisterSample_Driver</strong>）。<br>在需要生成事件记录的地方调用写事件函数（<strong>EventWriteDebugEvent</strong>），写入事件。</p>
+<ul>
+<li>系统自动日志记录的配置<br><img src="http://7xkc1v.com1.z0.glb.clouddn.com/images/event-tracing-1.png" alt=""><br><img src="http://7xkc1v.com1.z0.glb.clouddn.com/images/event-tracing-2.png" alt=""><br><img src="http://7xkc1v.com1.z0.glb.clouddn.com/images/event-tracing-3.png" alt=""><br><img src="http://7xkc1v.com1.z0.glb.clouddn.com/images/event-tracing-4.png" alt=""></li>
+</ul>
+
+      </div>
+      <footer class="article-footer">
+        <a data-url="http://jimmygc.github.io/2017/01/11/etw-learning/" data-id="cixsdkiwp0004l1cma9blqg3v" class="article-share-link">Share</a>
+        
+          <a href="http://jimmygc.github.io/2017/01/11/etw-learning/#comments" class="article-comment-link">Comments</a>
+        
+        
+      </footer>
+    </div>
+  </article>
+  
+    <section id="comments">
+	<!-- UY BEGIN -->
+	<div id="uyan_frame"></div>
+	<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2066865"></script>
+	<!-- UY END -->
+    </section>
+  
+
+            </div>
+          </section>
+          <aside id="sidebar">
+  <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+  <div class="sidebar-top">
+    <p>follow:</p>
+    <ul class="social-links">
+      
+        <li><a class="social-tooltip" title="github" href="https://github.com/jimmygc" target="_blank"><i id="icon-github" class="icon"></i></a></li>
+      
+    </ul>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/11/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">newer</strong>
+      <p class="article-nav-title">
+        
+          Hello World
+        
+      </p>
+      <i class="icon" id="icon-chevron-right"></i>
+    </a>
+  
+  
+    <a href="/2017/01/11/vim-windows-chinese-encoding/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">older</strong>
+      <p class="article-nav-title">【转】Vim在Windows控制台乱码问题解决</p>
+      <i class="icon" id="icon-chevron-left"></i>
+    </a>
+  
+</nav>
+
+  
+  <div class="widgets-container">
+    
+      
+  <div class="widget-wrap">
+    <h3 class="widget-title">recents</h3>
+    <div class="widget">
+      <ul id="recent-post" class="no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2017/01/11/hello-world/" class="title">Hello World</a></p>
+              <p class="item-date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2017/01/11/etw-learning/" class="title">关于最近学习内核驱动中使用ETW的记录</a></p>
+              <p class="item-date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2017/01/11/vim-windows-chinese-encoding/" class="title">【转】Vim在Windows控制台乱码问题解决</a></p>
+              <p class="item-date"><time datetime="2017-01-11T03:07:50.975Z" itemprop="datePublished">2017-01-11</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2015/10/26/设计模式学习/" class="title">设计模式学习</a></p>
+              <p class="item-date"><time datetime="2015-10-26T06:18:22.000Z" itemprop="datePublished">2015-10-26</time></p>
+            </div>
+          </li>
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category"></p>
+              <p class="item-title"><a href="/2015/07/17/sed-basic/" class="title">sed-basic</a></p>
+              <p class="item-date"><time datetime="2015-07-17T09:27:42.000Z" itemprop="datePublished">2015-07-17</time></p>
+            </div>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+    
+      
+
+    
+      
+  <div class="widget-wrap widget-list">
+    <h3 class="widget-title">archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">July 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+
+    
+  </div>
+</aside>
+        </div>
+      </div>
+    </div>
+    <footer id="footer">
+  
+  <div class="container">
+    <div class="container-inner">
+      <a id="back-to-top" href="javascript:;"><i class="icon" id="icon-angle-up"></i></a>
+      <div class="credit">
+        <!-- <h1 class="logo-wrap"> -->
+        <!--  <a href="/" class="logo"></a> -->
+        <!-- </h1> -->
+        <p>&copy; 2017 Jimmygc</p>
+        <p>Powered by <a href="//hexo.io/" target="_blank">Hexo</a>. Theme by <a href="//github.com/ppoffice" target="_blank">PPOffice</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    
+<script>
+  var disqus_shortname = 'jimmygc';
+  
+  var disqus_url = 'http://jimmygc.github.io/2017/01/11/etw-learning/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+
+  <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+
+
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+  <script src="/scrollLoading/jquery.scrollLoading.js"></script>
+  <script src="/scrollLoading/main.js"></script>
+
+
+<script src="/js/html-patch.js"></script>
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
